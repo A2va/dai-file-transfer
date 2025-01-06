@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ch.heigvd.dai</groupId>
-  <artifactId>java-ios</artifactId>
+  <artifactId>file-transfer</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
@@ -19,9 +19,16 @@
       <artifactId>picocli</artifactId>
       <version>4.7.6</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/io.javalin/javalin-bundle -->
+    <dependency>
+      <groupId>io.javalin</groupId>
+      <artifactId>javalin-bundle</artifactId>
+      <version>6.3.0</version>
+    </dependency>
   </dependencies>
 
-  <build>
+<build>
     <plugins>
       <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-shade-plugin -->
       <plugin>
