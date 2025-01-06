@@ -1,12 +1,19 @@
 package ch.heigvd.dai;
 
-import ch.heigvd.dai.commands.Root;
-import java.io.File;
-import picocli.CommandLine;
+import io.javalin.Javalin;
+
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
+  public static final int PORT = 8080;
 
   public static void main(String[] args) {
-    return 0;
+    Javalin app = Javalin.create();
+
+    // This will serve as our database
+    ConcurrentHashMap<String, File> db = new ConcurrentHashMap<>();
+
+
+    app.start(PORT);
   }
 }
