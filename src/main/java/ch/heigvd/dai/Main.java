@@ -1,14 +1,9 @@
 package ch.heigvd.dai;
 
 import io.javalin.Javalin;
-import io.javalin.http.UploadedFile;
-import org.eclipse.jetty.http.HttpTester;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.UUID;
-import java.io.BufferedInputStream;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
