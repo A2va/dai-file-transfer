@@ -28,13 +28,13 @@
     </dependency>
   </dependencies>
 
-<build>
+  <build>
     <plugins>
       <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-shade-plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.5.0</version>
         <executions>
           <execution>
             <goals>
@@ -50,6 +50,17 @@
                   <resource>MANIFEST.MF</resource>
                 </transformer>
               </transformers>
+              <filters>
+                <!-- This filter is needed to avoid a bug in the shade plugin -->
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>
