@@ -20,18 +20,18 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: |
-            ghcr.io/A2va/file-transfer
+            ghcr.io/A2va/f-transfer
           labels: |
-            org.opencontainers.image.title=file-transfer
-            org.opencontainers.image.description="https://github.com/A2va/dai-file-transfer"
+            org.opencontainers.image.title=f-transfer
+            org.opencontainers.image.description="https://github.com/A2va/dai-f-transfer"
             org.opencontainers.image.vendor=A2va
-            org.opencontainers.image.source="https://github.com/A2va/dai-file-transfer"
+            org.opencontainers.image.source="https://github.com/A2va/dai-f-transfer"
             org.opencontainers.image.version="${{ steps.gen_meta.outputs.sub_sha }}"
           tags: |
             type=raw,value=latest
             type=raw,value=${{ steps.gen_meta.outputs.sub_sha }}
           flavor: |
-            prefix=file-transfer,onlatest=true  
+            prefix=f-transfer,onlatest=true  
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -52,4 +52,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           provenance: false
-          tags: ghcr.io/A2va/ile-transfer:latest
+          tags: ghcr.io/A2va/file-transfer:latest
