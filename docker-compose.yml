@@ -4,14 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - 8080:8080
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`${FILETRANSFER_DOMAIN_NAME}`)
-      - traefik.http.routers.whoami.entrypoints=https
-      - traefik.http.routers.whoami.tls=true
-      - traefik.http.services.whoami.loadbalancer.server.port=8080
+      - traefik.http.routers.file-transfer.rule=Host(`${FILETRANSFER_DOMAIN_NAME}`)
+      - traefik.http.routers.file-transfer.entrypoints=https
+      - traefik.http.routers.file-transfer.tls=true
+      - traefik.http.services.file-transfer.loadbalancer.server.port=8080
 
   traefik:
     image: traefik:v3
