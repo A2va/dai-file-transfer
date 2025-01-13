@@ -33,7 +33,7 @@ public class Main {
       String id = UUID.randomUUID().toString();
       db.put(id, file);
       ctx.status(200);
-      ctx.json(new FileTransfer.Response(file, id));
+      ctx.json(new FileTransfer.UploadResponse(file, id));
     });
 
     app.get("/download/{id}", ctx -> {

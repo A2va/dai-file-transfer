@@ -53,11 +53,11 @@ public class FileTransfer {
         return new FileTransfer(new File(filePath));
     }
 
-    public static class Response {
+    public static class UploadResponse {
         private FileTransfer fileTransfer;
         private String id;
 
-        public Response(FileTransfer fileTransfer, String id) {
+        public UploadResponse(FileTransfer fileTransfer, String id) {
             this.fileTransfer = fileTransfer;
             this.id = id;
         }
