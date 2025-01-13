@@ -8,6 +8,8 @@ import java.util.UUID;
 public class FileTransfer {
     private File file;
     private String authCode;
+    private String type;
+    private String size;
 
     private static Path storageFolder = Paths.get(System.getProperty("java.io.tmpdir"), "file-transfer");
 
@@ -20,6 +22,10 @@ public class FileTransfer {
     private FileTransfer(File file) {
         this.file = file;
         this.authCode = UUID.randomUUID().toString();
+    }
+
+    public File getFile() {
+        return file;
     }
 
     public boolean checkAuthCode(String authCode) {
@@ -45,5 +51,23 @@ public class FileTransfer {
             e.printStackTrace();
         }
         return new FileTransfer(new File(filePath));
+    }
+
+    public static class UploadResponse {
+        private FileTransfer fileTransfer;
+        private String id;
+
+        public UploadResponse(FileTransfer fileTransfer, String id) {
+            this.fileTransfer = fileTransfer;
+            this.id = id;
+        }
+
+        public String getDownloadId() {
+            return this.id;
+        }
+
+        public String getAuthCode() {
+            return this.fileTransfer.authCode;
+        }
     }
 }
