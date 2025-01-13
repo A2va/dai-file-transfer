@@ -1,6 +1,6 @@
 services:
   file-transfer:
-    image: ghcr.io/A2va/file-transfer
+    image: ghcr.io/a2va/file-transfer
     build:
       context: .
       dockerfile: Dockerfile
