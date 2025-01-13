@@ -60,6 +60,60 @@ public class Main {
       }
     });
 
+    // Add a PATCH endpoint to modify a file (swaping the file content)
+    // Withouth modifying the download id
+    app.patch("/modify/{id}", ctx -> {
+        String id = ctx.pathParam("id");
+        if (id == null) {
+            ctx.status(400);
+            ctx.result("No id provided");
+        }
+
+        FileTransfer file = db.get(id);
+        if (file == null) {
+            ctx.status(404);
+            ctx.result("File not found");
+            return;
+        }
+
+        if (!file.checkAuthCode(ctx.queryParam("authCode"))) {
+            ctx.status(401);
+            ctx.result("Unauthorized");
+            return;
+        }
+
+        FileTransfer newFile = FileTransfer.fromInputStream(ctx.bodyInputStream(), file.getFile().getName());
+        db.replace(id, newFile);
+        ctx.status(200);
+        ctx.json(new FileTransfer.UploadResponse(newFile, id));
+    });
+
+    // Add a DELETE endpoint to delete a file
+    app.delete("/delete/{id}", ctx -> {
+        String id = ctx.pathParam("id");
+        if (id == null) {
+            ctx.status(400);
+            ctx.result("No id provided");
+        }
+
+        FileTransfer file = db.get(id);
+        if (file == null) {
+            ctx.status(404);
+            ctx.result("File not found");
+            return;
+        }
+
+        if (!file.checkAuthCode(ctx.queryParam("authCode"))) {
+            ctx.status(401);
+            ctx.result("Unauthorized");
+            return;
+        }
+
+        db.remove(id);
+        ctx.status(200);
+        ctx.result("File deleted");
+    });
+
     app.start(PORT);
   }
 }
