@@ -31,11 +31,143 @@ Then, you can compile the project into a JAR located into the target folder:
 
 ### 4.1 Docker compose
 
-...
+Pour lancer l'application avec Docker Compose, il suffit de lancer la commande suivante:
+
+```docker compose -build -d up```
+
+Vous pouvez aussi télécharger l'image Docker depuis le Docker Hub:
+
+```docker pull ghcr.io/a2va/dai-file-transfer:latest```
+
+```docker run -d -p 8080:8080 ghcr.io/a2va/dai-file-transfer:latest```
 
 ## 5. API
 
-...
+The API allows you to upload and download files.
+
+The json format is mainly used for the API.
+
+The API is based on the CRUD operations :
+- Upload a file
+- Download a file
+- Delete a file
+
+### 5.1 Endpoints
+
+#### 5.1.1 Upload a file
+
+- `PUT /{filename}` 
+
+Upload a file, this request will automatically redirect to the upload endpoint.
+`/upload/{filename}`
+
+**Request**
+
+- `filename` (string): the name of the file
+
+#### 5.1.2 Upload a file
+
+- `PUT /upload/{filename}`
+
+Put the file with a specific name, the server will respond with a code to authenticate the user to modify/delete the file later and an ID.
+
+**Request**
+
+The request body must contain the file to upload.
+
+**Response**
+
+???????
+- `id` (string): the ID of the file
+- `code` (string): the code to authenticate the user
+
+**Status codes**
+
+- `200 (OK)`: the file has been uploaded
+- `400 (Bad Request)`: no file provided
+
+#### 5.1.3 Download a file
+
+- `GET /download/{id}`
+
+Download the file with the following download ID.
+
+**Request**
+
+- `id` (string): the download ID of the file
+
+**Response**
+
+The response body contains the file to download.
+
+**Status codes**
+
+- `200 (OK)`: the file has been downloaded
+- `400 (Bad Request)`: no id provided
+- `404 (Not Found)`: file not found
+
+#### 5.1.4 Rename a file
+
+- `PATCH /rename/{id}`
+
+**Request**
+
+- `id` (string): the ID of the file
+- `filename` (string): the new name of the file
+
+**Response**
+
+??????
+
+**Status codes**
+
+- `200 (OK)`: the file has been renamed
+- `400 (Bad Request)`: no id provided
+- `401 (Unauthorized)`: the code is invalid
+- `404 (Not Found)`: file not found
+
+#### 5.1.5 Modify a file
+
+- `PATCH /modify/{id}`
+
+Replace the file with the following ID by a new file. 
+Without modifying the ID or the download ID.
+
+**Request**
+
+- `id` (string): the ID of the file
+
+**Response**
+
+???????
+
+**Status codes**
+
+- `200 (OK)`: the file has been modified
+- `400 (Bad Request)`: no id provided
+- `401 (Unauthorized)`: the code is invalid
+- `404 (Not Found)`: file not found
+
+#### 5.1.6 Delete a file
+
+- `DELETE /delete/{id}`
+
+Delete the file with the following ID. The user must provide the authentication code give by the server when the file was uploaded.
+
+**Request**
+
+- `id` (string): the ID of the file
+
+**Response**
+
+??????
+
+**Status codes**
+
+- `200 (OK)`: file deleted
+- `400 (Bad Request)`: no id provided
+- `401 (Unauthorized)`: the code is invalid
+- `404 (Not Found)`: file not found
 
 ## 6. Server
 
