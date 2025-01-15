@@ -19,27 +19,48 @@ A simple file transfer application written in java.
 
 Start by cloning the repository:
 
-`git clone https://github.com/A2va/dai-file-transfer.git`
+```bash
+git clone https://github.com/forestier/dai-flappy-bird.git
+```
 
 Then, you can compile the project into a JAR located into the target folder:
 
-`./mvnw package`
+```bash
+./mvnw package
+```
 
 ## 4. Docker
 
-...
+You can build the Docker image with the following command:
+````bash
+docker build -t ghcr.io/a2va/dai-file-transfer:latest .
+````
+Or using the prebuilt version from the GitHub Container Registry:
+```bash
+docker pull ghcr.io/a2va/dai-file-transfer:latest
+```
 
-### 4.1 Docker compose
+Then you can run it with the following command:
+```bash
+docker run -d -p 8080:8080 ghcr.io/a2va/dai-file-transfer:latest
+```
 
-Pour lancer l'application avec Docker Compose, il suffit de lancer la commande suivante:
+### 4.1 Docker Compose
 
-```docker compose -build -d up```
+Once you cloned the repository, you can deploy the application using Docker Compose.
+For that you first need to create a `.env` file in the root of the project with the following content:
+```
+FILETRANSFER_DOMAIN_NAME=filetransfer.example.com
 
-Vous pouvez aussi télécharger l'image Docker depuis le Docker Hub:
+TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME=traefik.example.com
+TRAEFIK_ACME_EMAIL=your@email.com
+TRAEFIK_ENABLE_DASHBOARD=true
+```
+Modify each of the variables to match your needs, then go to your domain provider 
+and add a record pointing to the IP address of your server.
 
-```docker pull ghcr.io/a2va/dai-file-transfer:latest```
-
-```docker run -d -p 8080:8080 ghcr.io/a2va/dai-file-transfer:latest```
+To launch the application with Docker Compose, simply run the following command:
+```docker compose up -d```
 
 ## 5. API
 
@@ -78,8 +99,8 @@ The request body must contain the file to upload.
 **Response**
 
 ???????
-- `id` (string): the ID of the file
-- `code` (string): the code to authenticate the user
+- `downloadId` (string): the ID of the file
+- `authCode` (string): the code to authenticate the user
 
 **Status codes**
 
@@ -132,6 +153,7 @@ The response body contains the file to download.
 
 Replace the file with the following ID by a new file. 
 Without modifying the ID or the download ID.
+The download id stays the same but the authentication code will be changed.
 
 **Request**
 
@@ -139,7 +161,9 @@ Without modifying the ID or the download ID.
 
 **Response**
 
-???????
+- `downloadId` (string): the ID of the file
+- `authCode` (string): the new code to authenticate the user
+
 
 **Status codes**
 
