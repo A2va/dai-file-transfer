@@ -17,26 +17,26 @@ A simple file transfer application written in java.
 
 `curl -X PUT -F "file=@/path/to/your/file" http://localhost:8080/upload/{filename}`
 
-The server will respond with a code to authenticate the user to modify/delete the file later and an downloadId
+The server will respond with a code to authenticate the user to modify/delete the file later and an fileId
 that will be used to download the file.
 
 #### 2.1.2 Download a file
 
 `curl -X GET http://localhost:8080/download/{id} -o file.txt`
 
-Using the downloadId as `{id}`.
+Using the fileId as `{id}`.
 
 #### 2.1.3 Modify a file
 
 `curl -X PATCH -F "file=@/path/to/your/file" http://localhost:8080/modify/{id}?authCode={code}`
 
-Using the downloadId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
+Using the fileId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
 
 #### 2.1.4 Delete a file
 
 `curl -X DELETE http://localhost:8080/delete/{id}?authCode={code}`
 
-Using the downloadId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
+Using the fileId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
 
 ## 3. Get the project
 
@@ -121,14 +121,14 @@ The request body must contain the file to upload.
 
 **Response**
 
-???????
-- `downloadId` (string): the ID of the file
+- `fileId` (string): the ID of the file
 - `authCode` (string): the code to authenticate the user
 
 **Status codes**
 
 - `200 (OK)`: the file has been uploaded
 - `400 (Bad Request)`: no file provided
+- `409 (Conflict)`: the file already exists
 
 #### 5.1.3 Download a file
 
@@ -169,6 +169,7 @@ The response body contains the file to download.
 - `400 (Bad Request)`: no id provided
 - `401 (Unauthorized)`: the code is invalid
 - `404 (Not Found)`: file not found
+- `409 (Conflict)`: the file already exists
 
 #### 5.1.5 Modify a file
 
@@ -184,7 +185,7 @@ The download id stays the same but the authentication code will be changed.
 
 **Response**
 
-- `downloadId` (string): the ID of the file
+- `fileId` (string): the ID of the file
 - `authCode` (string): the new code to authenticate the user
 
 
