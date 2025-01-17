@@ -11,9 +11,32 @@ This project has been made in the context of [DAI](https://github.com/heig-vd-da
 
 A simple file transfer application written in java.
 
-### 2.1 How to use
+### 2.1 How to use it with cURL
 
-`curl ...`
+#### 2.1.1 Upload a file
+
+`curl -X PUT -F "file=@/path/to/your/file" http://localhost:8080/upload/{filename}`
+
+The server will respond with a code to authenticate the user to modify/delete the file later and an downloadId
+that will be used to download the file.
+
+#### 2.1.2 Download a file
+
+`curl -X GET http://localhost:8080/download/{id} -o file.txt`
+
+Using the downloadId as `{id}`.
+
+#### 2.1.3 Modify a file
+
+`curl -X PATCH -F "file=@/path/to/your/file" http://localhost:8080/modify/{id}?authCode={code}`
+
+Using the downloadId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
+
+#### 2.1.4 Delete a file
+
+`curl -X DELETE http://localhost:8080/delete/{id}?authCode={code}`
+
+Using the downloadId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
 
 ## 3. Get the project
 
