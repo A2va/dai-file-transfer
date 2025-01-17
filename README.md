@@ -20,22 +20,28 @@ A simple file transfer application written in java.
 The server will respond with a code to authenticate the user to modify/delete the file later and an fileId
 that will be used to download the file.
 
-#### 2.1.2 Download a file
+For simplicity, you can also do the upload in the following way:
+```bash
+curl -T path/to/your/file -L - localhost:8080
+```
 
-`curl -X GET http://localhost:8080/download/{id} -o file.txt`
+#### 2.1.2 Download a file
+```bash
+curl -X GET http://localhost:8080/download/{id} -o file.txt
+```
 
 Using the fileId as `{id}`.
 
 #### 2.1.3 Modify a file
-
+```bash
 `curl -X PATCH -F "file=@/path/to/your/file" http://localhost:8080/modify/{id}?authCode={code}`
-
+```
 Using the fileId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
 
 #### 2.1.4 Delete a file
-
+```bash
 `curl -X DELETE http://localhost:8080/delete/{id}?authCode={code}`
-
+```
 Using the fileId as `{id}` and the code provided by the server when the file was uploaded as `{code}`.
 
 ## 3. Get the project
