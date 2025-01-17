@@ -1,8 +1,10 @@
 package ch.heigvd.dai;
 
 import io.javalin.Javalin;
+import io.javalin.http.Context;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -43,6 +45,13 @@ public class Main {
             ctx.result("No file provided");
           }
           String filename = ctx.pathParam("filename");
+          Path path = FileTransfer.getStorageFolder().resolve(filename);
+          if (Files.exists(path)) {
+            ctx.status(409);
+            ctx.result("File already exists");
+            return;
+          }
+
           FileTransfer file = FileTransfer.fromInputStream(ctx.bodyInputStream(), filename);
 
           String id = UUID.randomUUID().toString();
@@ -55,15 +64,8 @@ public class Main {
         "/download/{id}",
         ctx -> {
           String id = ctx.pathParam("id");
-          if (id == null) {
-            ctx.status(400);
-            ctx.result("No id provided");
-          }
-
-          FileTransfer file = db.get(id);
+          FileTransfer file = getFileTransfer(id, db, ctx, false);
           if (file == null) {
-            ctx.status(404);
-            ctx.result("File not found");
             return;
           }
 
@@ -78,27 +80,35 @@ public class Main {
           }
         });
 
+    app.patch(
+        "/rename/{id}",
+        ctx -> {
+          String id = ctx.pathParam("id");
+          FileTransfer file = getFileTransfer(id, db, ctx, true);
+          if (file == null) {
+            return;
+          }
+
+          String filename = ctx.queryParam("filename");
+          Path path = FileTransfer.getStorageFolder().resolve(filename);
+          if (Files.exists(path)) {
+            ctx.status(409);
+            ctx.result("File already exists");
+            return;
+          }
+
+          file.getFile().renameTo(path.toFile());
+          ctx.status(200);
+        });
+
     // Add a PATCH endpoint to modify a file (swaping the file content)
-    // Withouth modifying the download id
+    // Without modifying the download id
     app.patch(
         "/modify/{id}",
         ctx -> {
           String id = ctx.pathParam("id");
-          if (id == null) {
-            ctx.status(400);
-            ctx.result("No id provided");
-          }
-
-          FileTransfer file = db.get(id);
+          FileTransfer file = getFileTransfer(id, db, ctx, true);
           if (file == null) {
-            ctx.status(404);
-            ctx.result("File not found");
-            return;
-          }
-
-          if (!file.checkAuthCode(ctx.queryParam("authCode"))) {
-            ctx.status(401);
-            ctx.result("Unauthorized");
             return;
           }
 
@@ -114,29 +124,39 @@ public class Main {
         "/delete/{id}",
         ctx -> {
           String id = ctx.pathParam("id");
-          if (id == null) {
-            ctx.status(400);
-            ctx.result("No id provided");
-          }
-
-          FileTransfer file = db.get(id);
+          FileTransfer file = getFileTransfer(id, db, ctx, true);
           if (file == null) {
-            ctx.status(404);
-            ctx.result("File not found");
-            return;
-          }
-
-          if (!file.checkAuthCode(ctx.queryParam("authCode"))) {
-            ctx.status(401);
-            ctx.result("Unauthorized");
             return;
           }
 
           db.remove(id);
+          file.getFile().delete();
           ctx.status(200);
           ctx.result("File deleted");
         });
 
     app.start(PORT);
+  }
+
+  private static FileTransfer getFileTransfer(
+      String id, ConcurrentHashMap<String, FileTransfer> db, Context ctx, boolean authCheck) {
+    if (id == null) {
+      ctx.status(400);
+      ctx.result("No id provided");
+      return null;
+    }
+
+    FileTransfer file = db.get(id);
+    if (file == null) {
+      ctx.status(404);
+      ctx.result("File not found");
+      return null;
+    }
+
+    if (authCheck && !file.checkAuthCode(ctx.queryParam("authCode"))) {
+      ctx.status(401);
+      ctx.result("Unauthorized");
+      return null;
+    }
   }
 }
