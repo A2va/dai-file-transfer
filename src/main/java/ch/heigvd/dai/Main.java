@@ -132,6 +132,10 @@ public class Main {
             return;
           }
 
+          // remove the file from the tmp folder
+          file.getFile().delete();
+
+          // remove the file from the database
           db.remove(id);
           ctx.status(200);
           ctx.result("File deleted");
