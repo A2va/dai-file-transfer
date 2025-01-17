@@ -68,7 +68,7 @@ public class FileTransfer {
       this.id = id;
     }
 
-    public String getDownloadId() {
+    public String getFileId() {
       return this.id;
     }
 
