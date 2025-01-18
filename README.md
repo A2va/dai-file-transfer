@@ -156,27 +156,6 @@ The response body contains the file to download.
 - `400 (Bad Request)`: no id provided
 - `404 (Not Found)`: file not found
 
-#### 5.1.4 Rename a file
-
-- `PATCH /rename/{id}`
-
-**Request**
-
-- `id` (string): the ID of the file
-- `filename` (string): the new name of the file
-
-**Response**
-
-??????
-
-**Status codes**
-
-- `200 (OK)`: the file has been renamed
-- `400 (Bad Request)`: no id provided
-- `401 (Unauthorized)`: the code is invalid
-- `404 (Not Found)`: file not found
-- `409 (Conflict)`: the file already exists
-
 #### 5.1.5 Modify a file
 
 - `PATCH /modify/{id}`
@@ -214,7 +193,7 @@ Delete the file with the following ID. The user must provide the authentication 
 
 **Response**
 
-??????
+- String: File deleted
 
 **Status codes**
 
@@ -225,11 +204,13 @@ Delete the file with the following ID. The user must provide the authentication 
 
 ## 6. Server
 
-...
-
 ### 6.1 Set up the server
 
-The README (or repository) contains instructions how to install and configure the virtual machine with each step
+For the server, we used a VPS from [Azure](https://azure.microsoft.com/)
+
+[DAI - Acquire a virtual machine on a cloud provider](https://github.com/heig-vd-dai-course/heig-vd-dai-course/blob/5df80f64121b35bed5adc5f3d486d90ee2b1344b/20-ssh-and-scp/COURSE_MATERIAL.md#acquire-a-virtual-machine-on-a-cloud-provider)
+
+All the explanations to set up the server are explained in the DAI - Acquire a virtual machine on a cloud provider.
 
 ### 6.2 Use DNS to have a domain name
 
