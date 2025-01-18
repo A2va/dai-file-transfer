@@ -76,20 +76,7 @@ docker run -d -p 8080:8080 ghcr.io/a2va/dai-file-transfer:latest
 
 ### 4.1 Docker Compose
 
-Once you cloned the repository, you can deploy the application using Docker Compose.
-For that you first need to create a `.env` file in the root of the project with the following content:
-```
-FILETRANSFER_DOMAIN_NAME=filetransfer.example.com
-
-TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME=traefik.example.com
-TRAEFIK_ACME_EMAIL=your@email.com
-TRAEFIK_ENABLE_DASHBOARD=true
-```
-Modify each of the variables to match your needs, then go to your domain provider 
-and add a record pointing to the IP address of your server.
-
-To launch the application with Docker Compose, simply run the following command:
-```docker compose up -d```
+To learn how to use the docker compose file, you can go to [Deployment/Docker Compose](#63-docker-compose)
 
 ## 5. API
 
@@ -202,24 +189,60 @@ Delete the file with the following ID. The user must provide the authentication 
 - `401 (Unauthorized)`: the code is invalid
 - `404 (Not Found)`: file not found
 
-## 6. Server
+## 6. Deployment
 
 ### 6.1 Set up the server
 
-For the server, we used a VPS from [Azure](https://azure.microsoft.com/)
+In the context of the DAI course, the service was deployed on an Azure virtual machine
+with the free credit provided by the Azure for Students program.
 
-[DAI - Acquire a virtual machine on a cloud provider](https://github.com/heig-vd-dai-course/heig-vd-dai-course/blob/5df80f64121b35bed5adc5f3d486d90ee2b1344b/20-ssh-and-scp/COURSE_MATERIAL.md#acquire-a-virtual-machine-on-a-cloud-provider)
+To create a virtual machine, you head to [Azure](https://azure.microsoft.com/) and follows this steps:
+1. Create a new virtual machine from the `Create a ressource` section
+2. Select the following VM specs:
+   * Region: (Europe) West Europe
+   * Availability options: No infrastructure redundancy required
+   * Security type: Trusted launch virtual machines (the default)
+   * Image: Ubuntu Server 24.04 LTS - x64 Gen2 (the default)
+   * VM architecture: x64
+   * Size: Standard_B1s - you might need to click "See all sizes" to see this option
+   * Public inbound ports: Allow selected ports
+   * Select inbound ports: HTTP (80), HTTPS (443), SSH (22)
 
-All the explanations to set up the server are explained in the DAI - Acquire a virtual machine on a cloud provider.
+The username was named `ubuntu` and the SSH public key was already existing.
+If you want more information, you can head to [DAI - Acquire a virtual machine on a cloud provider](https://github.com/heig-vd-dai-course/heig-vd-dai-course/blob/5df80f64121b35bed5adc5f3d486d90ee2b1344b/20-ssh-and-scp/COURSE_MATERIAL.md#acquire-a-virtual-machine-on-a-cloud-provider)
 
-### 6.2 Use DNS to have a domain name
+### 6.2 Configure the DNS zone
 
-The README (or repository) contains explains how to configure the DNS zone to access your web application
+You need to configure the DNS zone to access your web application, for that go to your domain provider and add a record pointing to the IP address of your server.
+If you don't have a domain, you follow these [steps](https://github.com/heig-vd-dai-course/heig-vd-dai-course/blob/main/22-web-infrastructures/COURSE_MATERIAL.md#obtain-a-domain-name) from the DAI course.
 
-### 6.3 Run the app on the server
+In my case my domains is on cloudflare, so head to the [Cloudflare Dashboard](https://dash.cloudflare.com), and click 
+on the domain you want to use
+1. Go to DNS -> Records
+2. Add two type A records, that point to the IP address of your server (It's displayed on the configuration on page of the VM in Azure).
+   * `transfer`
+   * `traefik`
 
-The README (or repository) contains instructions how to deploy, run and access the web applications with Docker Compose
+
+### 6.3 Docker Compose
+
+Once you cloned the repository on the VM, you can deploy the application using Docker Compose.
+For that you first need to create a `.env` file in the root of the project with the following content:
+```
+FILETRANSFER_DOMAIN_NAME=transfer.example.com
+
+TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME=traefik.example.com
+TRAEFIK_ACME_EMAIL=your@email.com
+TRAEFIK_ENABLE_DASHBOARD=true
+```
+Modify each of the variables to match your needs, then go to your domain provider
+and add a record pointing to the IP address of your server.
+
+To launch the application with Docker Compose, simply run the following command:
+```docker compose up -d```
 
 ### 6.4 Try it
 
-The README displays the domain names configuration in the DNS zone to validate everything is set up right
+This project is deployed on the following domain:
+- `transfer.a2va.dev`
+- `traefik.a2va.dev`
