@@ -158,5 +158,6 @@ public class Main {
       ctx.result("Unauthorized");
       return null;
     }
+    return file;
   }
 }

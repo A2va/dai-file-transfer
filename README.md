@@ -219,10 +219,9 @@ If you don't have a domain, you follow these [steps](https://github.com/heig-vd-
 In my case my domains is on cloudflare, so head to the [Cloudflare Dashboard](https://dash.cloudflare.com), and click 
 on the domain you want to use
 1. Go to DNS -> Records
-2. Add two type A records, that point to the IP address of your server (It's displayed on the configuration on page of the VM in Azure).
+2. Add two type A records, that point to the IP address of your server (It's displayed on the configuration page of the VM in Azure).
    * `transfer`
    * `traefik`
-
 
 ### 6.3 Docker Compose
 
